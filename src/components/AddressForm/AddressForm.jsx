@@ -10,9 +10,9 @@ function AddressForm({ states }) {
   const [state, setState] = useState("");
 
   const handleChange = (e) => {
-    if (e.target.id === "street") {
+    if (e.target.name === "street") {
       setStreet(e.target.value);
-    } else if (e.target.id === "city") {
+    } else if (e.target.name === "city") {
       setCity(e.target.value);
     } else if (e.target.name === "state") {
       setState(e.target.value);
@@ -26,7 +26,6 @@ function AddressForm({ states }) {
           display: "flex",
           flexDirection: "column",
           maxWidth: "400px",
-          margin: "auto",
           gap: "20px",
         }}
       >
