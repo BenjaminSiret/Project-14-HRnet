@@ -6,13 +6,22 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import DatePickerInput from "../DatePicker/DatePickerInput";
 import AddressForm from "../AddressForm/AddressForm";
+import { validateInput, validateBirthDate, validateJoiningDate } from "../../services/validations";
 
 function Form() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [joiningDate, setJoiningDate] = useState("");
-  const [department, setDepartment] = useState("");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    birthDate: "",
+    joiningDate: "",
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    department: "",
+  });
+
+  const [formErrors, setFormErrors] = useState({});
 
   const states = [
     "Alabama",
@@ -29,18 +38,39 @@ function Form() {
   const departments = ["Engineering", "Marketing", "Sales", "HR"];
 
   const handleInputChange = (e) => {
-    if (e.target.name === "firstName") {
-      setFirstName(e.target.value);
-    } else if (e.target.name === "lastName") {
-      setLastName(e.target.value);
-    } else if (e.target.name === "department") {
-      setDepartment(e.target.value);
+    const { name, value } = e.target;
+
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const firstNameError = validateInput("firstName", formData.firstName);
+    const lastNameError = validateInput("lastName", formData.lastName);
+    const birthDateError = validateBirthDate(formData.birthDate.startDate);
+    const joiningDateError = validateJoiningDate(formData.joiningDate.startDate);
+
+    const errors = {
+      firstName: firstNameError,
+      lastName: lastNameError,
+      birthDate: birthDateError,
+      joiningDate: joiningDateError,
+    };
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      console.log("Form submitted successfully!");
     }
   };
 
   return (
     <>
-      <form action="">
+      <form action="" onSubmit={handleSubmit}>
         <Box
           sx={{
             display: "flex",
@@ -55,37 +85,39 @@ function Form() {
             id="firstName"
             name="firstName"
             label="First Name"
-            value={firstName}
+            value={formData.firstName}
             onChange={handleInputChange}
+            error={!!formErrors.firstName}
+            helperText={formErrors.firstName && formErrors.firstName}
           ></TextField>
           <TextField
             id="lastName"
             name="lastName"
             label="Last Name"
-            value={lastName}
+            value={formData.lastName}
             onChange={handleInputChange}
+            error={!!formErrors.lastName}
+            helperText={formErrors.lastName && formErrors.lastName}
           ></TextField>
-          <DatePickerInput
-            id="birthDate"
-            label="Birth date"
-            value={birthDate}
-            onChange={(newValue) => setBirthDate(newValue)}
-          />
-          <DatePickerInput
-            id="joiningDate"
-            label="Joining date"
-            value={joiningDate}
-            onChange={(newValue) => setJoiningDate(newValue)}
-          />
+          <DatePickerInput id="birthDate" label="Birth date" value={formData.birthDate} />
+          <DatePickerInput id="joiningDate" label="Joining date" value={formData.joiningDate} />
           <Typography variant="h6">Address</Typography>
-          <AddressForm states={states} />
+          <AddressForm
+            states={states}
+            street={formData.street}
+            city={formData.city}
+            state={formData.state}
+            zipCode={formData.zipCode}
+            department={formData.department}
+            handleInputChange={handleInputChange}
+          />
           <Typography variant="h6">Department</Typography>
           <TextField
             select
             id="department"
             name="department"
             label="Department"
-            value={department}
+            value={formData.department}
             onChange={handleInputChange}
           >
             {departments.map((department) => (
