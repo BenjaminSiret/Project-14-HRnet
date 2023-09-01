@@ -1,12 +1,14 @@
 import { RouterProvider } from "react-router-dom";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import PropTypes from "prop-types";
 import "./App.css";
 
 function App({ router }) {
   return (
-    <div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <RouterProvider router={router} />
-    </div>
+    </LocalizationProvider>
   );
 }
 
