@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import DatePickerInput from "../DatePicker/DatePickerInput";
 import AddressForm from "../AddressForm/AddressForm";
 import { validateInput, validateBirthDate, validateJoiningDate } from "../../services/validations";
+import { states, departments } from "../../data/data";
+import dayjs from "dayjs";
 
 function Form() {
   const [formData, setFormData] = useState({
@@ -22,27 +24,21 @@ function Form() {
   });
 
   const [formErrors, setFormErrors] = useState({});
-
-  const states = [
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-  ];
-
-  const departments = ["Engineering", "Marketing", "Sales", "HR"];
+  const [datePickerErrors, setDatePickerErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevState) => ({
-      ...prevState,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
+    }));
+  };
+
+  const handleDateChange = (date, name) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: dayjs(date).format("DD/MM/YYYY"),
     }));
   };
 
@@ -51,7 +47,7 @@ function Form() {
 
     const firstNameError = validateInput("firstName", formData.firstName);
     const lastNameError = validateInput("lastName", formData.lastName);
-    const birthDateError = validateBirthDate(formData.birthDate.startDate);
+    const birthDateError = validateBirthDate(formData.birthDate);
     const joiningDateError = validateJoiningDate(formData.joiningDate.startDate);
 
     const errors = {
@@ -66,6 +62,8 @@ function Form() {
     if (Object.keys(errors).length === 0) {
       console.log("Form submitted successfully!");
     }
+
+    console.log(errors);
   };
 
   return (
@@ -99,8 +97,22 @@ function Form() {
             error={!!formErrors.lastName}
             helperText={formErrors.lastName && formErrors.lastName}
           ></TextField>
-          <DatePickerInput id="birthDate" label="Birth date" value={formData.birthDate} />
-          <DatePickerInput id="joiningDate" label="Joining date" value={formData.joiningDate} />
+          <DatePickerInput
+            id="birthDate"
+            label="Birth date"
+            name="birthDate"
+            value={dayjs(formData.birthDate).format("DD/MM/YYYY")}
+            onDateChange={handleDateChange}
+            error={!!formErrors.birthDate}
+            helperText={formErrors.birthDate && formErrors.birthDate}
+          />
+          <DatePickerInput
+            id="joiningDate"
+            name="joiningDate"
+            label="Joining date"
+            value={dayjs(formData.joiningDate).format("DD/MM/YYYY")}
+            onDateChange={handleDateChange}
+          />
           <Typography variant="h6">Address</Typography>
           <AddressForm
             states={states}
