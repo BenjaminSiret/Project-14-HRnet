@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
@@ -22,9 +22,20 @@ function Form() {
     zipCode: "",
     department: "",
   });
+  const addressData = {
+    street: formData.street,
+    city: formData.city,
+    state: formData.state,
+    zipCode: formData.zipCode,
+  };
 
   const [formErrors, setFormErrors] = useState({});
-  const [datePickerErrors, setDatePickerErrors] = useState({});
+  const addressErrors = {
+    street: formErrors.street,
+    city: formErrors.city,
+    state: formErrors.state,
+    zipCode: formErrors.zipCode,
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,13 +59,23 @@ function Form() {
     const firstNameError = validateInput("firstName", formData.firstName);
     const lastNameError = validateInput("lastName", formData.lastName);
     const birthDateError = validateBirthDate(formData.birthDate);
-    const joiningDateError = validateJoiningDate(formData.joiningDate.startDate);
+    const joiningDateError = validateJoiningDate(formData.joiningDate);
+    const streetError = validateInput("street", formData.street);
+    const cityError = validateInput("city", formData.city);
+    const stateError = validateInput("state", formData.state);
+    const zipCodeError = validateInput("zipCode", formData.zipCode);
+    const departementError = validateInput("department", formData.department);
 
     const errors = {
       firstName: firstNameError,
       lastName: lastNameError,
       birthDate: birthDateError,
       joiningDate: joiningDateError,
+      street: streetError,
+      city: cityError,
+      state: stateError,
+      zipCode: zipCodeError,
+      department: departementError,
     };
 
     setFormErrors(errors);
@@ -112,15 +133,14 @@ function Form() {
             label="Joining date"
             value={dayjs(formData.joiningDate).format("DD/MM/YYYY")}
             onDateChange={handleDateChange}
+            error={!!formErrors.joiningDate}
+            helperText={formErrors.joiningDate && formErrors.joiningDate}
           />
           <Typography variant="h6">Address</Typography>
           <AddressForm
             states={states}
-            street={formData.street}
-            city={formData.city}
-            state={formData.state}
-            zipCode={formData.zipCode}
-            department={formData.department}
+            address={addressData}
+            addressErrors={addressErrors}
             handleInputChange={handleInputChange}
           />
           <Typography variant="h6">Department</Typography>
@@ -131,6 +151,8 @@ function Form() {
             label="Department"
             value={formData.department}
             onChange={handleInputChange}
+            error={!!formErrors.department}
+            helperText={formErrors.department && formErrors.department}
           >
             {departments.map((department) => (
               <MenuItem key={department} value={department}>
