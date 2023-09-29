@@ -83,7 +83,6 @@ function Form() {
     if (Object.keys(errors).length === 0) {
       console.log("Form submitted successfully!");
     }
-
     console.log(errors);
   };
 

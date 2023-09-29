@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 function validateInput (inputType, inputValue) {
   const validations = {
     firstName: { regex: /^[A-Za-z][A-Za-z-' ]{0,29}$/, name: "First name" },
@@ -24,43 +26,37 @@ function validateInput (inputType, inputValue) {
 
 
 function validateBirthDate (date, maxYears = 100, minYears = 18) {
-  const birthDate = new Date(date);
-  const currentDate = new Date();
-  const minDate = new Date(currentDate).setFullYear(
-    currentDate.getFullYear() - minYears
-  );
-  const maxDate = new Date(currentDate).setFullYear(
-    currentDate.getFullYear() - maxYears
-  );
+  const birthDate = dayjs(date, "DD/MM/YYYY");
+  const currentDate = dayjs();
+  const minDate = currentDate.subtract(minYears, 'year');
+  const maxDate = currentDate.subtract(maxYears, 'year');
 
   if (!date) {
     return "Birth date is required";
   }
-  if (birthDate > minDate) {
-    return `Birth date must be before ${new Date(minDate).toLocaleDateString(
-      "fr-FR"
-    )}`;
+  if (birthDate.isAfter(minDate)) {
+    return `Birth date must be before ${minDate.format("DD/MM/YYYY")}`;
   }
-  if (birthDate < maxDate) {
-    return `Birth date must be after ${new Date(maxDate).toLocaleDateString(
-      "fr-FR"
-    )}`;
+  if (birthDate.isBefore(maxDate)) {
+    return `Birth date must be after ${maxDate.format("DD/MM/YYYY")}`;
   }
+
   return null;
 }
 
 function validateJoiningDate (date) {
-  const currentDate = new Date();
-  const joiningDate = new Date(date);
+  const currentDate = dayjs();
+  const joiningDate = dayjs(date, "DD/MM/YYYY");
 
   if (!date) {
     return "Joining date is required";
   }
-
-  if (joiningDate > currentDate) {
+  if (joiningDate.isAfter(currentDate)) {
     return "Joining date must be before today";
   }
+
   return null;
 }
+
 
 export { validateInput, validateBirthDate, validateJoiningDate };
