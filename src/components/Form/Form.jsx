@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AppContext } from "../../utils/AppContext";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,25 +12,16 @@ import { states, departments } from "../../data/data";
 import dayjs from "dayjs";
 
 function Form() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    birthDate: "",
-    joiningDate: "",
-    street: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    department: "",
-  });
+  const { state, dispatch } = useContext(AppContext);
+  const [formErrors, setFormErrors] = useState({});
+
   const addressData = {
-    street: formData.street,
-    city: formData.city,
-    state: formData.state,
-    zipCode: formData.zipCode,
+    street: state.formData.street,
+    city: state.formData.city,
+    state: state.formData.state,
+    zipCode: state.formData.zipCode,
   };
 
-  const [formErrors, setFormErrors] = useState({});
   const addressErrors = {
     street: formErrors.street,
     city: formErrors.city,
@@ -40,31 +32,31 @@ function Form() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    dispatch({
+      type: "UPDATE_FORM_DATA",
+      payload: { [name]: value },
+    });
   };
 
   const handleDateChange = (date, name) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: dayjs(date).format("DD/MM/YYYY"),
-    }));
+    dispatch({
+      type: "UPDATE_FORM_DATA",
+      payload: { [name]: dayjs(date).format("DD/MM/YYYY") },
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const firstNameError = validateInput("firstName", formData.firstName);
-    const lastNameError = validateInput("lastName", formData.lastName);
-    const birthDateError = validateBirthDate(formData.birthDate);
-    const joiningDateError = validateJoiningDate(formData.joiningDate);
-    const streetError = validateInput("street", formData.street);
-    const cityError = validateInput("city", formData.city);
-    const stateError = validateInput("state", formData.state);
-    const zipCodeError = validateInput("zipCode", formData.zipCode);
-    const departementError = validateInput("department", formData.department);
+    const firstNameError = validateInput("firstName", state.formData.firstName);
+    const lastNameError = validateInput("lastName", state.formData.lastName);
+    const birthDateError = validateBirthDate(state.formData.birthDate);
+    const joiningDateError = validateJoiningDate(state.formData.joiningDate);
+    const streetError = validateInput("street", state.formData.street);
+    const cityError = validateInput("city", state.formData.city);
+    const stateError = validateInput("state", state.formData.state);
+    const zipCodeError = validateInput("zipCode", state.formData.zipCode);
+    const departementError = validateInput("department", state.formData.department);
 
     const errors = {
       firstName: firstNameError,
@@ -82,8 +74,9 @@ function Form() {
 
     if (Object.keys(errors).length === 0) {
       console.log("Form submitted successfully!");
+    } else {
+      console.log(errors);
     }
-    console.log(errors);
   };
 
   return (
@@ -103,7 +96,7 @@ function Form() {
             id="firstName"
             name="firstName"
             label="First Name"
-            value={formData.firstName}
+            value={state.formData.firstName}
             onChange={handleInputChange}
             error={!!formErrors.firstName}
             helperText={formErrors.firstName && formErrors.firstName}
@@ -112,7 +105,7 @@ function Form() {
             id="lastName"
             name="lastName"
             label="Last Name"
-            value={formData.lastName}
+            value={state.formData.lastName}
             onChange={handleInputChange}
             error={!!formErrors.lastName}
             helperText={formErrors.lastName && formErrors.lastName}
@@ -121,7 +114,7 @@ function Form() {
             id="birthDate"
             label="Birth date"
             name="birthDate"
-            value={dayjs(formData.birthDate).format("DD/MM/YYYY")}
+            value={dayjs(state.formData.birthDate).format("DD/MM/YYYY")}
             onDateChange={handleDateChange}
             error={!!formErrors.birthDate}
             helperText={formErrors.birthDate && formErrors.birthDate}
@@ -130,7 +123,7 @@ function Form() {
             id="joiningDate"
             name="joiningDate"
             label="Joining date"
-            value={dayjs(formData.joiningDate).format("DD/MM/YYYY")}
+            value={dayjs(state.formData.joiningDate).format("DD/MM/YYYY")}
             onDateChange={handleDateChange}
             error={!!formErrors.joiningDate}
             helperText={formErrors.joiningDate && formErrors.joiningDate}
@@ -148,7 +141,7 @@ function Form() {
             id="department"
             name="department"
             label="Department"
-            value={formData.department}
+            value={state.formData.department}
             onChange={handleInputChange}
             error={!!formErrors.department}
             helperText={formErrors.department && formErrors.department}
