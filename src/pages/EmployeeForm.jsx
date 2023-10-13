@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
+//TODO: create modale to confirm the add of an employee
+
 function EmployeeForm() {
   return (
     <>
