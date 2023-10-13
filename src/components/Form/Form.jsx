@@ -45,35 +45,40 @@ function Form() {
     });
   };
 
+  const validationRules = {
+    firstName: validateInput,
+    lastName: validateBirthDate,
+    birthDate: validateJoiningDate,
+    joiningDate: validateInput,
+    street: validateInput,
+    city: validateInput,
+    state: validateInput,
+    zipCode: validateInput,
+    department: validateInput,
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const firstNameError = validateInput("firstName", state.formData.firstName);
-    const lastNameError = validateInput("lastName", state.formData.lastName);
-    const birthDateError = validateBirthDate(state.formData.birthDate);
-    const joiningDateError = validateJoiningDate(state.formData.joiningDate);
-    const streetError = validateInput("street", state.formData.street);
-    const cityError = validateInput("city", state.formData.city);
-    const stateError = validateInput("state", state.formData.state);
-    const zipCodeError = validateInput("zipCode", state.formData.zipCode);
-    const departementError = validateInput("department", state.formData.department);
+    const errors = {};
 
-    const errors = {
-      firstName: firstNameError,
-      lastName: lastNameError,
-      birthDate: birthDateError,
-      joiningDate: joiningDateError,
-      street: streetError,
-      city: cityError,
-      state: stateError,
-      zipCode: zipCodeError,
-      department: departementError,
-    };
+    Object.keys(state.formData).forEach((key) => {
+      const error = validationRules[key](state.formData[key]);
+      if (error) {
+        errors[key] = error;
+      }
+    });
 
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      console.log("Form submitted successfully!");
+      dispatch({
+        type: "ADD_EMPLOYEE",
+        payload: {
+          id: state.employees.length + 1,
+          ...state.formData,
+        },
+      });
     } else {
       console.log(errors);
     }
