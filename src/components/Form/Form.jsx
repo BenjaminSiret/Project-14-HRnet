@@ -1,15 +1,20 @@
 import { useState, useContext } from "react";
 import { AppContext } from "../../utils/AppContext";
+import {
+  validateInput,
+  validateBirthDate,
+  validateJoiningDate,
+} from "../../services/validationsService";
+import { addEmployeeToDatabase } from "../../services/databaseService";
+import { states, departments } from "../../data/data";
+import DatePickerInput from "../DatePicker/DatePickerInput";
+import dayjs from "dayjs";
+import AddressForm from "../AddressForm/AddressForm";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import DatePickerInput from "../DatePicker/DatePickerInput";
-import AddressForm from "../AddressForm/AddressForm";
-import { validateInput, validateBirthDate, validateJoiningDate } from "../../services/validations";
-import { states, departments } from "../../data/data";
-import dayjs from "dayjs";
 
 function Form() {
   const { state, dispatch } = useContext(AppContext);
@@ -47,9 +52,9 @@ function Form() {
 
   const validationRules = {
     firstName: validateInput,
-    lastName: validateBirthDate,
-    birthDate: validateJoiningDate,
-    joiningDate: validateInput,
+    lastName: validateInput,
+    birthDate: validateBirthDate,
+    joiningDate: validateJoiningDate,
     street: validateInput,
     city: validateInput,
     state: validateInput,
@@ -57,13 +62,20 @@ function Form() {
     department: validateInput,
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const errors = {};
 
     Object.keys(state.formData).forEach((key) => {
-      const error = validationRules[key](state.formData[key]);
+      let error;
+
+      if (key === "birthDate" || key === "joiningDate") {
+        error = validationRules[key](state.formData[key]);
+      } else {
+        error = validationRules[key](key, state.formData[key]);
+      }
+
       if (error) {
         errors[key] = error;
       }
@@ -79,6 +91,8 @@ function Form() {
           ...state.formData,
         },
       });
+
+      await addEmployeeToDatabase(state.formData);
     } else {
       console.log(errors);
     }

@@ -2,30 +2,27 @@ import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import DataTable from "../components/DataTable/DataTable";
-import db from "../firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState, useContext } from "react";
+import { subscribeToEmployees } from "../services/databaseService";
+import { useEffect, useContext } from "react";
 import { AppContext } from "../utils/AppContext";
-import convertTimestampToDate from "../services/formatting";
 
 function EmployeesList() {
   const { state, dispatch } = useContext(AppContext);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const employeesCol = collection(db, "employees");
-      const employeesSnapshot = await getDocs(employeesCol);
-      const employeesList = employeesSnapshot.docs.map((doc) => convertTimestampToDate(doc.data()));
-
-      employeesList.forEach((employee) => {
-        dispatch({
-          type: "ADD_EMPLOYEE",
-          payload: employee,
+    if (state.employees.length === 0) {
+      const unsubscribe = subscribeToEmployees((employees) => {
+        employees.forEach((employee) => {
+          dispatch({
+            type: "ADD_EMPLOYEE",
+            payload: employee,
+          });
         });
       });
-    };
-    fetchData();
-  }, []);
+
+      return () => unsubscribe();
+    }
+  }, [dispatch, state.employees.length]);
 
   return (
     <>
