@@ -11,9 +11,12 @@ function EmployeeForm() {
     <>
       <Typography variant="h4">Add an employee</Typography>
       <Form />
-      <Box mt={8}>
+      <Box sx={{ display: "flex", gap: "20px", justifyContent: "center", marginTop: '30px'}}>
         <Button variant="outlined" component={Link} to="/">
           Back to home page
+        </Button>
+        <Button variant="outlined" component={Link} to="/list">
+          List of employees
         </Button>
       </Box>
     </>
