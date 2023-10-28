@@ -99,14 +99,14 @@ function Form() {
         payload: {
           firstName: "",
           lastName: "",
-          birthDate: null,
-          joiningDate: null,
+          birthDate: "",
+          joiningDate: "",
           street: "",
           city: "",
           state: "",
           zipCode: "",
           department: "",
-        }
+        },
       });
     } else {
       console.log(errors);
@@ -146,9 +146,11 @@ function Form() {
           ></TextField>
           <DatePickerInput
             id="birthDate"
-            label="Birth date"
             name="birthDate"
-            value={dayjs(state.formData.birthDate).format("DD/MM/YYYY")}
+            label="Birth date"
+            value={
+              state.formData.birthDate ? dayjs(state.formData.birthDate).format("DD/MM/YYYY") : null
+            }
             onDateChange={handleDateChange}
             error={!!formErrors.birthDate}
             helperText={formErrors.birthDate && formErrors.birthDate}
@@ -157,7 +159,11 @@ function Form() {
             id="joiningDate"
             name="joiningDate"
             label="Joining date"
-            value={dayjs(state.formData.joiningDate).format("DD/MM/YYYY")}
+            value={
+              state.formData.joiningDate
+                ? dayjs(state.formData.joiningDate).format("DD/MM/YYYY")
+                : null
+            }
             onDateChange={handleDateChange}
             error={!!formErrors.joiningDate}
             helperText={formErrors.joiningDate && formErrors.joiningDate}
