@@ -43,8 +43,8 @@ function AddressForm({ states, address, addressErrors, handleInputChange }) {
           helperText={addressErrors.state && addressErrors.state}
         >
           {states.map((state) => (
-            <MenuItem key={state} value={state}>
-              {state}
+            <MenuItem key={state} value={state.abbreviation}>
+              {state.name}
             </MenuItem>
           ))}
         </TextField>

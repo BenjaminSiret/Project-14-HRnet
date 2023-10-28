@@ -9,7 +9,6 @@ import { AppContext } from "../utils/AppContext";
 function EmployeesList() {
   const { state, dispatch } = useContext(AppContext);
 
-  console.log(state);
   useEffect(() => {
     if (state.employees.length === 0) {
       const unsubscribe = subscribeToEmployees((employees) => {
