@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import DataTable from "../components/DataTable/DataTable";
 import { subscribeToEmployees } from "../services/databaseService";
 import { useEffect, useContext } from "react";
@@ -26,11 +27,26 @@ function EmployeesList() {
 
   return (
     <>
-      <h2>Employees list</h2>
-      <DataTable pageSize="1" />
-      <Box mt={4}>
+      <Box
+        sx={{
+          border: "1px solid gray",
+          borderRadius: "4px",
+          padding: "10px 10px 7px",
+          maxWidth: "380px",
+          margin: "auto",
+        }}
+      >
+        <Typography variant="h4">Employees list</Typography>
+      </Box>
+      <Box mt={8}>
+        <DataTable pageSize="1" />
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "20px", marginTop:"40px"}}>
         <Button variant="outlined" component={Link} to="/">
           Back to home page
+        </Button>
+        <Button variant="outlined" component={Link} to="/add">
+          Add an employee
         </Button>
       </Box>
     </>

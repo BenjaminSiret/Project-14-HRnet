@@ -9,14 +9,24 @@ import Box from "@mui/material/Box";
 function EmployeeForm() {
   return (
     <>
-      <Typography variant="h4">Add an employee</Typography>
+      <Box
+        sx={{
+          border: "1px solid gray",
+          borderRadius: "4px",
+          padding: "10px 10px 7px",
+          maxWidth: "380px",
+          margin: "auto",
+        }}
+      >
+        <Typography variant="h4">Add an employee</Typography>
+      </Box>
       <Form />
-      <Box sx={{ display: "flex", gap: "20px", justifyContent: "center", marginTop: '30px'}}>
+      <Box sx={{ display: "flex", gap: "20px", justifyContent: "center", marginTop: "30px" }}>
         <Button variant="outlined" component={Link} to="/">
           Back to home page
         </Button>
         <Button variant="outlined" component={Link} to="/list">
-          List of employees
+          Employees list
         </Button>
       </Box>
     </>

@@ -43,7 +43,7 @@ function AddressForm({ states, address, addressErrors, handleInputChange }) {
           helperText={addressErrors.state && addressErrors.state}
         >
           {states.map((state) => (
-            <MenuItem key={state} value={state.abbreviation}>
+            <MenuItem key={state.abbreviation} value={state.abbreviation}>
               {state.name}
             </MenuItem>
           ))}
@@ -64,7 +64,7 @@ function AddressForm({ states, address, addressErrors, handleInputChange }) {
 }
 
 AddressForm.propTypes = {
-  states: PropTypes.arrayOf(PropTypes.string),
+  states: PropTypes.arrayOf(PropTypes.object),
   address: PropTypes.shape({
     street: PropTypes.string,
     city: PropTypes.string,

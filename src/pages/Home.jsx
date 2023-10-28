@@ -43,7 +43,7 @@ function Home() {
           sx={{
             display: "flex",
             flexDirection: { xs: "column", sm: "row" },
-            gap: "30px",
+            gap: "40px",
             justifyContent: "center",
             marginTop: "30px",
             alignItems: "center",
