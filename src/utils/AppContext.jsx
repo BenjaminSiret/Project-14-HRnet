@@ -9,6 +9,8 @@ const appReducer = (state, action) => {
       return { ...state, formData: { ...state.formData, ...action.payload } };
     case "ADD_EMPLOYEE":
       return { ...state, employees: [...state.employees, action.payload] };
+    case "RESET_FORM_DATA":
+      return { ...state, formData: action.payload };
     default:
       return state;
   }

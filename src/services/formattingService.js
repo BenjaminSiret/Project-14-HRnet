@@ -9,8 +9,15 @@ function convertTimestampToDate (employeeData) {
 }
 
 function convertDateToTimestamp (dateString) {
-  const newDate = new Date(dateString);
-  return Timestamp.fromDate(newDate)
+  const [day, month, year] = dateString.split('/');
+  const isoDateString = `${year}-${month}-${day}`;
+
+  if (isNaN(Date.parse(isoDateString))) {
+    throw new Error('Invalid date');
+  }
+
+  const newDate = new Date(isoDateString);
+  return Timestamp.fromDate(newDate);
 }
 
 export { convertTimestampToDate, convertDateToTimestamp }

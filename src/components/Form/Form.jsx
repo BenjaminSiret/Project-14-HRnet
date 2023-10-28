@@ -93,6 +93,21 @@ function Form() {
       });
 
       await addEmployeeToDatabase(state.formData);
+      setFormErrors({});
+      dispatch({
+        type: "RESET_FORM_DATA",
+        payload: {
+          firstName: "",
+          lastName: "",
+          birthDate: null,
+          joiningDate: null,
+          street: "",
+          city: "",
+          state: "",
+          zipCode: "",
+          department: "",
+        }
+      });
     } else {
       console.log(errors);
     }
