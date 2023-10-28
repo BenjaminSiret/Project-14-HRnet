@@ -27,7 +27,7 @@ function EmployeesList() {
 
   return (
     <>
-      <h2>Page de liste des employés</h2>
+      <h2>Employees list</h2>
       <DataTable pageSize="1" />
       <Box mt={4}>
         <Button variant="outlined" component={Link} to="/">
