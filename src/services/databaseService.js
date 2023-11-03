@@ -1,6 +1,17 @@
 import db from "../firebaseConfig";
-import { collection, orderBy, query, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore";
+import { getDocs, where, collection, orderBy, query, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore";
 import { convertDateToTimestamp, convertTimestampToDate } from "./formattingService";
+
+async function doesEmployeeExist (employee) {
+  const employeesCol = collection(db, "employees");
+  const q = query(employeesCol,
+    where("firstName", "==", employee.firstName),
+    where("lastName", "==", employee.lastName),
+    where("birthDate", "==", convertDateToTimestamp(employee.birthDate)));
+
+  const querySnapshot = await getDocs(q);
+  return !querySnapshot.empty;
+}
 
 async function addEmployeeToDatabase (employee) {
   try {
@@ -9,10 +20,14 @@ async function addEmployeeToDatabase (employee) {
     employee.joiningDate = convertDateToTimestamp(employee.joiningDate);
 
     await addDoc(collection(db, "employees"), employee);
+
+    return true
   } catch (error) {
     console.error("Error adding document: ", error);
+    return false
   }
 }
+
 function subscribeToEmployees (onReceive) {
   const employeesCol = collection(db, "employees");
   const q = query(employeesCol, orderBy("createdAt", "desc"));
@@ -33,4 +48,4 @@ function subscribeToEmployees (onReceive) {
   return unsubscribe;
 }
 
-export { addEmployeeToDatabase, subscribeToEmployees }
+export { doesEmployeeExist, addEmployeeToDatabase, subscribeToEmployees }

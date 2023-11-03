@@ -1,27 +1,47 @@
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 
-function Modal ({ isOpen, onClose }) {
+function Modal({ isOpen, onClose, message }) {
   if (!isOpen) return null;
 
   return (
     <>
       <Box
         sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
           display: "flex",
-          flexDirection: "column",
-          maxWidth: "400px",
-          border: "1px solid #D8D8D8",
-          borderRadius: "4px",
-          padding: "10px",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(0,0,0,0.3)",
+          zIndex: 100,
         }}
       >
-        <TextField value="Modal"></TextField>
-        <Button onClick={onClose} variant="outlined" sx={{ maxWidth: "70px" }}>
-          Close
-        </Button>
+        <Box
+          sx={{
+            backgroundColor: "white",
+            padding: "20px 30px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center",
+            border: "1px solid gray",
+            borderRadius: "4px",
+            gap: "20px",
+          }}
+        >
+          <Typography gutterBottom variant="body1">
+            {message}
+          </Typography>
+          <Button onClick={onClose} variant="contained" sx={{ maxWidth: "70px" }}>
+            Close
+          </Button>
+        </Box>
       </Box>
     </>
   );
@@ -30,6 +50,7 @@ function Modal ({ isOpen, onClose }) {
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  message: PropTypes.string,
 };
 
 export default Modal;

@@ -5,7 +5,7 @@ import {
   validateBirthDate,
   validateJoiningDate,
 } from "../../services/validationsService";
-import { addEmployeeToDatabase } from "../../services/databaseService";
+import { addEmployeeToDatabase, doesEmployeeExist } from "../../services/databaseService";
 import { states, departments } from "../../data/data";
 import DatePickerInput from "../DatePicker/DatePickerInput";
 import dayjs from "dayjs";
@@ -21,6 +21,7 @@ function Form() {
   const { state, dispatch } = useContext(AppContext);
   const [formErrors, setFormErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   const addressData = {
     street: state.formData.street,
@@ -90,31 +91,48 @@ function Form() {
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      dispatch({
-        type: "ADD_EMPLOYEE",
-        payload: {
-          id: state.employees.length + 1,
-          ...state.formData,
-        },
-      });
 
-      await addEmployeeToDatabase(state.formData);
+      const employeeExists = await doesEmployeeExist(state.formData);
+
+      if (employeeExists) {
+        setMessage("Employee already exists");
+        setIsModalOpen(true);
+        setFormErrors({});
+        return;
+      }
+
+      const result = await addEmployeeToDatabase(state.formData);
+      if (result) {
+        dispatch({
+          type: "ADD_EMPLOYEE",
+          payload: {
+            id: state.employees.length + 1,
+            ...state.formData,
+          },
+        });
+
+        setMessage("Employee added successfully");
+
+        dispatch({
+          type: "RESET_FORM_DATA",
+          payload: {
+            firstName: "",
+            lastName: "",
+            birthDate: "",
+            joiningDate: "",
+            street: "",
+            city: "",
+            state: "",
+            zipCode: "",
+            department: "",
+          },
+        });
+      } else {
+        setMessage("Failed to add employee");
+      }
+
       setIsModalOpen(true);
       setFormErrors({});
-      dispatch({
-        type: "RESET_FORM_DATA",
-        payload: {
-          firstName: "",
-          lastName: "",
-          birthDate: "",
-          joiningDate: "",
-          street: "",
-          city: "",
-          state: "",
-          zipCode: "",
-          department: "",
-        },
-      });
     } else {
       console.log(errors);
     }
@@ -199,11 +217,11 @@ function Form() {
               </MenuItem>
             ))}
           </TextField>
+          <Modal isOpen={isModalOpen} onClose={closeModal} message={message}></Modal>
         </Box>
         <Button type="submit" variant="contained">
           Save
         </Button>
-        <Modal isOpen={isModalOpen} onClose={closeModal}></Modal>
       </form>
     </>
   );
