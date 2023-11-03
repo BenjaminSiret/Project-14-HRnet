@@ -13,7 +13,6 @@ async function addEmployeeToDatabase (employee) {
     console.error("Error adding document: ", error);
   }
 }
-
 function subscribeToEmployees (onReceive) {
   const employeesCol = collection(db, "employees");
   const q = query(employeesCol, orderBy("createdAt", "desc"));

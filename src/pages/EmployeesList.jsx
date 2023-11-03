@@ -14,10 +14,12 @@ function EmployeesList() {
     if (state.employees.length === 0) {
       const unsubscribe = subscribeToEmployees((employees) => {
         employees.forEach((employee) => {
-          dispatch({
-            type: "ADD_EMPLOYEE",
-            payload: employee,
-          });
+          if (!state.employees.find((e) => e.id === employee.id)) {
+            dispatch({
+              type: "ADD_EMPLOYEE",
+              payload: employee,
+            });
+          }
         });
       });
 
@@ -41,7 +43,7 @@ function EmployeesList() {
       <Box mt={8}>
         <DataTable pageSize="1" />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "center", gap: "20px", marginTop:"40px"}}>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "20px", marginTop: "40px" }}>
         <Button variant="outlined" component={Link} to="/">
           Back to home page
         </Button>

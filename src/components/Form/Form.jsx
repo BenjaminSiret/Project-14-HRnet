@@ -15,10 +15,12 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Modal from "../Modal/Modal";
 
 function Form() {
   const { state, dispatch } = useContext(AppContext);
   const [formErrors, setFormErrors] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const addressData = {
     street: state.formData.street,
@@ -48,6 +50,10 @@ function Form() {
       type: "UPDATE_FORM_DATA",
       payload: { [name]: dayjs(date).format("DD/MM/YYYY") },
     });
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const validationRules = {
@@ -93,6 +99,7 @@ function Form() {
       });
 
       await addEmployeeToDatabase(state.formData);
+      setIsModalOpen(true);
       setFormErrors({});
       dispatch({
         type: "RESET_FORM_DATA",
@@ -196,6 +203,7 @@ function Form() {
         <Button type="submit" variant="contained">
           Save
         </Button>
+        <Modal isOpen={isModalOpen} onClose={closeModal}></Modal>
       </form>
     </>
   );
