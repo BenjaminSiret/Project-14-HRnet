@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import logo from '../assets/logo.jpg';
 
 function Home() {
   return (
@@ -17,9 +18,9 @@ function Home() {
             padding: "20px",
             maxWidth: "300px",
             margin: "auto",
-            marginBottom:"40px"
+            marginBottom: "40px",
           }}
-        >
+        > <img src={logo} alt="logo" />
           <Typography
             variant="h2"
             color=""
@@ -49,10 +50,24 @@ function Home() {
             alignItems: "center",
           }}
         >
-          <Button variant="contained" sx={{ maxWidth: "150px" }} component={Link} to="/add">
+          <Button
+            variant="contained"
+            sx={{
+              maxWidth: "150px",
+            }}
+            component={Link}
+            to="/add"
+          >
             Add an employee
           </Button>
-          <Button variant="contained" sx={{ maxWidth: "150px" }} component={Link} to="/list">
+          <Button
+            variant="contained"
+            sx={{
+              maxWidth: "150px",
+            }}
+            component={Link}
+            to="/list"
+          >
             Employees list
           </Button>
         </Box>

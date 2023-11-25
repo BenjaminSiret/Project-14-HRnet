@@ -218,7 +218,7 @@ function Form() {
           </TextField>
           <Modal isOpen={isModalOpen} onClose={closeModal} message={message}></Modal>
         </Box>
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" sx={{ color: "white"}}>
           Save
         </Button>
       </form>
