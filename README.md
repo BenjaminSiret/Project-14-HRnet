@@ -3,7 +3,7 @@
 
 ## Description
 This project is the last of the Javascript / React training. It consists of moving a library from jQuery to React.
-This project is build with ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+Build with ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
 ## Used Technologies
 ![Node version](https://img.shields.io/badge/node-21.2.0-informational)
