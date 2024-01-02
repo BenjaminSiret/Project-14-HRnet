@@ -93,41 +93,39 @@ function Form() {
     if (Object.keys(errors).length === 0) {
       const employeeExists = await doesEmployeeExist(state.formData);
 
-      if (employeeExists) {
-        setMessage("Employee already exists");
-        setIsModalOpen(true);
-        setFormErrors({});
-        return;
-      }
+      if (!employeeExists) {
+        const employeeId = await addEmployeeToDatabase(state.formData);
 
-      const result = await addEmployeeToDatabase(state.formData);
-      if (result) {
-        dispatch({
-          type: "ADD_EMPLOYEE",
-          payload: {
-            id: state.employees.length + 1,
-            ...state.formData,
-          },
-        });
+        if (employeeId) {
+          dispatch({
+            type: "ADD_EMPLOYEE",
+            payload: {
+              id: employeeId,
+              ...state.formData,
+            },
+          });
 
-        setMessage("Employee added successfully");
+          setMessage("Employee added successfully");
 
-        dispatch({
-          type: "RESET_FORM_DATA",
-          payload: {
-            firstName: "",
-            lastName: "",
-            birthDate: "",
-            joiningDate: "",
-            street: "",
-            city: "",
-            state: "",
-            zipCode: "",
-            department: "",
-          },
-        });
+          dispatch({
+            type: "RESET_FORM_DATA",
+            payload: {
+              firstName: "",
+              lastName: "",
+              birthDate: "",
+              joiningDate: "",
+              street: "",
+              city: "",
+              state: "",
+              zipCode: "",
+              department: "",
+            },
+          });
+        } else {
+          setMessage("Failed to add employee");
+        }
       } else {
-        setMessage("Failed to add employee");
+        setMessage("Employee already exists");
       }
 
       setIsModalOpen(true);
@@ -218,7 +216,7 @@ function Form() {
           </TextField>
           <Modal isOpen={isModalOpen} onClose={closeModal} message={message}></Modal>
         </Box>
-        <Button type="submit" variant="contained" sx={{ color: "white"}}>
+        <Button type="submit" variant="contained" sx={{ color: "white" }}>
           Save
         </Button>
       </form>

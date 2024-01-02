@@ -19,12 +19,12 @@ async function addEmployeeToDatabase (employee) {
     employee.birthDate = convertDateToTimestamp(employee.birthDate);
     employee.joiningDate = convertDateToTimestamp(employee.joiningDate);
 
-    await addDoc(collection(db, "employees"), employee);
+    const docRef = await addDoc(collection(db, "employees"), employee);
 
-    return true
+    return docRef.id;
   } catch (error) {
     console.error("Error adding document: ", error);
-    return false
+    return null
   }
 }
 

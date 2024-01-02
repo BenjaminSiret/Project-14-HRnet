@@ -7,8 +7,17 @@ const appReducer = (state, action) => {
   switch (action.type) {
     case "UPDATE_FORM_DATA":
       return { ...state, formData: { ...state.formData, ...action.payload } };
+    // case "ADD_EMPLOYEE":
+    //   console.log(action.payload);
+    //   return { ...state, employees: [...state.employees, action.payload] };
     case "ADD_EMPLOYEE":
-      return { ...state, employees: [...state.employees, action.payload] };
+      console.log(action.payload.birthDate)
+      const newEmployee = {
+        ...action.payload,
+        birthDate: typeof action.payload.birthDate === 'object' ? action.payload.birthDate.toDate().toLocaleDateString() : action.payload.birthDate,
+        joiningDate: typeof action.payload.joiningDate === 'object' ? action.payload.joiningDate.toDate().toLocaleDateString() : action.payload.joiningDate,
+      };
+      return { ...state, employees: [...state.employees, newEmployee] };
     case "RESET_FORM_DATA":
       return { ...state, formData: action.payload };
     default:

@@ -11,21 +11,21 @@ function EmployeesList() {
   const { state, dispatch } = useContext(AppContext);
 
   useEffect(() => {
-    if (state.employees.length === 0) {
-      const unsubscribe = subscribeToEmployees((employees) => {
-        employees.forEach((employee) => {
-          if (!state.employees.find((e) => e.id === employee.id)) {
-            dispatch({
-              type: "ADD_EMPLOYEE",
-              payload: employee,
-            });
-          }
-        });
+    const unsubscribe = subscribeToEmployees((employees) => {
+      employees.forEach((newEmployee) => {
+        const employeeExists = state.employees.some((e) => e.id === newEmployee.id);
+        if (!employeeExists) {
+          dispatch({
+            type: "ADD_EMPLOYEE",
+            payload: newEmployee,
+          });
+        }
       });
+    });
 
-      return () => unsubscribe();
-    }
-  }, [dispatch, state.employees.length]);
+    return () => unsubscribe();
+  }, [dispatch, state.employees]);
+
 
   return (
     <>
