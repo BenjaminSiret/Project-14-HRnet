@@ -16,7 +16,7 @@ const columns = [
 
 export default function DataTable() {
   const { state } = useContext(AppContext);
-  console.log(state.employees)
+
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid

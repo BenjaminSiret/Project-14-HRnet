@@ -26,7 +26,6 @@ function EmployeesList() {
     return () => unsubscribe();
   }, [dispatch, state.employees]);
 
-
   return (
     <>
       <Box
