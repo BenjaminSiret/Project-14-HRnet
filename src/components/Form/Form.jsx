@@ -15,7 +15,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Modal from "../Modal/Modal";
+import Modal from "react-essential-modal";
 
 function Form() {
   const { state, dispatch } = useContext(AppContext);
